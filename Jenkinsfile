@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'Linux-Node'
+        label 'windows-node'
     }
     stages {
         stage('Test') {
@@ -13,7 +13,7 @@ pipeline {
             agent {
                 docker { 
                     image 'openjdk:11'
-                    label 'Linux-Node' 
+                    label 'windows-node' 
                 }     
             }
             steps {
