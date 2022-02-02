@@ -10,13 +10,7 @@ pipeline {
             }
         }
         stage('Build') {
-            agent {
-                docker { 
-                    image 'openjdk:11'
-                    label 'linux-node' 
-                }     
-            }
-            steps {
+            teps {
                 sh 'chmod +x mvnw'
                 sh './mvnw package -Dcheckstyle.skip'
             }
