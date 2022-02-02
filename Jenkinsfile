@@ -13,7 +13,7 @@ pipeline {
             agent {
                 docker { 
                     image 'openjdk:11'
-                    label 'windows-node' 
+                    label 'docker' 
                 }     
             }
             steps {
