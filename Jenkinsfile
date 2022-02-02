@@ -1,11 +1,11 @@
 pipeline {
     agent {
-        label 'windows-node'
+        label 'linux-node'
     }
     stages {
         stage('Test') {
             steps {
-                sh 'echo Kekus'
+                sh 'echo test'
                 sh 'ls -l'
             }
         }
