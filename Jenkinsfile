@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                "ls -la"
+                sh 'ls -la'
             }
         }
          stage('Linting') {
