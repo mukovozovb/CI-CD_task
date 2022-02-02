@@ -7,7 +7,7 @@ pipeline {
             steps {
                 "ls -la"
             }
-        
+        }
          stage('Linting') {
             steps {
                 sh 'cd ./bin'
