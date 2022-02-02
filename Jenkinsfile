@@ -10,6 +10,12 @@ pipeline {
             }
         }
         stage('Build') {
+            agent {
+                docker { 
+                    image 'openjdk:11'
+                    label 'linux-Node' 
+                }     
+            }
             steps {
                 sh 'chmod +x mvnw'
                 sh './mvnw package -Dcheckstyle.skip'
@@ -17,8 +23,6 @@ pipeline {
         }    
         stage('Test-Static') {
             steps {
-                sh 'whoami'
-                sh 'ip a'
                 sh 'chmod +x mvnw'
                 sh './mvnw package -Dcheckstyle.skip'
                 sh 'docker build -f ./Dockerfile -t spring/petclinic .'
