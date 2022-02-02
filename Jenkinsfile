@@ -10,7 +10,7 @@ pipeline {
             }
         }
         stage('Build') {
-            teps {
+            steps {
                 sh 'chmod +x mvnw'
                 sh './mvnw package -Dcheckstyle.skip'
             }
