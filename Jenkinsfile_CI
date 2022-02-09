@@ -1,0 +1,34 @@
+pipeline {
+    agent {
+        label 'linux-node'
+    }
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('docker_hub')
+	}
+    stages {
+        stage('SonarQube Analysis') {
+            tools {
+                maven 'maven_sonarqube'
+            }
+            environment {
+                scannerHome = tool 'sonarqube'
+            }
+            steps {
+                withSonarQubeEnv('sonar_for_petclinic') {
+                    sh 'chmod +x mvnw'
+                    sh 'mvn clean verify -Dcheckstyle.skip sonar:sonar'
+                }
+            }
+        }
+        stage("Push docker image to docker hub") {
+            steps {
+                sh 'sudo docker build -t mukovozovbohdan/petclinic:$BUILD_NUMBER -t mukovozovbohdan/petclinic:latest .'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'sudo docker push mukovozovbohdan/petclinic:latest'
+                sh 'sudo docker push mukovozovbohdan/petclinic:$BUILD_NUMBER'
+                sh 'sudo docker logout'           
+            }
+        }
+   }          
+}
+

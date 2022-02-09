@@ -1,0 +1,33 @@
+pipeline {
+    agent {
+        label 'linux-node'
+    }
+    stages {
+        stage('deploy') {
+            steps {
+                script{
+                    def result = sh(script: """sudo docker ps -a | grep $env.ENVIRONMENT | wc -l""", returnStdout: true).trim()
+                    sh "echo $result"
+                    if ("${result}" != "0"){
+                        sh "sudo docker rm $env.ENVIRONMENT -f"
+                    }
+                }
+        }
+            post{
+                always{
+                    script{
+                        sh "sudo docker pull mukovozovbohdan/petclinic:$env.Image"
+                        sh "sudo docker run -d --name $env.ENVIRONMENT -p $env.PORT:8080 mukovozovbohdan/petclinic:$env.Image"
+                    }
+                    sleep(20)
+
+                }
+            }
+        }
+        stage('healthcheck') {
+            steps{
+                sh "curl -Is http://15.188.246.227:$env.PORT/"
+            }
+        }
+    }
+}

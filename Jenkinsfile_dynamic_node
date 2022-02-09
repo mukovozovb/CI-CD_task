@@ -1,0 +1,20 @@
+pipeline {
+    agent {
+        label 'linux-node'
+    }
+    stages {
+
+        stage('Test Build') {
+            agent {
+                docker {
+                    image 'openjdk:11'
+                    label 'linux-node'
+                }    
+            }
+            steps {
+                sh 'chmod +x linter.sh'                
+                sh './linter.sh Dockerfile'
+            }
+        }
+    }
+}
